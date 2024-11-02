@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
@@ -17,3 +18,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [Controller::class, 'index']);
 Route::get('login', [LoginController::class, 'index']);
+Route::post('/login', [LoginController::class, 'login']);
+Route::get('/admin', [AdminController::class, 'index']);
