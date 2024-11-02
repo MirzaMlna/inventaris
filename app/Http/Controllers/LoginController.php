@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,20 +13,28 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-    public function login(Request $req)
+    public function login(Request $request)
     {
-        $credential = $req->only('username', 'password');
+        $credential = $request->only('username', 'password');
 
+        $user = User::where('username', $credential['username'])->first();
+
+        // if ($user) {
+        //     dd([
+        //         'id' => $user->id,
+        //         'username' => $user->username,
+        //         'password' => $user->password,
+        //         'role' => $user->role,
+        //     ]);
+        // }
         if (Auth::attempt($credential)) {
-            //jika berhasil login, maka check rolenya
             if (Auth::user()->role == 'admin') {
                 return redirect('/admin');
             } else {
                 return redirect('/kasir');
             }
         } else {
-            //jika gagal login, kembalikan ke halaman login
-            return redirect('login');
+            return redirect('/')->withErrors(['loginError' => 'Username atau password salah']);
         }
     }
 }
